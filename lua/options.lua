@@ -76,3 +76,15 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+vim.cmd 'highlight NormalNC guibg=#222233'
+vim.api.nvim_create_autocmd('WinEnter', {
+  callback = function()
+    vim.wo.winhighlight = 'Normal:Normal,NormalNC:DiffAdd'
+  end,
+})
+vim.o.shell = '/bin/fish'
+vim.api.nvim_create_autocmd('WinLeave', {
+  callback = function()
+    vim.wo.winhighlight = 'Normal:NormalNC,NormalNC:NormalNC'
+  end,
+})

@@ -85,34 +85,5 @@ return {
         end,
       },
     }
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
-    local servers = {
-      gopls = {},
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-          },
-        },
-      },
-    }
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      'stylua',
-    })
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-    require('mason-lspconfig').setup {
-      ensure_installed = {},
-      automatic_installation = false,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
-      },
-    }
   end,
 }

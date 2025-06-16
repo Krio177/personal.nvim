@@ -11,6 +11,8 @@ return {
       end
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        javascript = { 'eslint', 'eslint_d' },
+        php = { 'phpcs', 'phpmd' },
       }
 
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
