@@ -1,4 +1,7 @@
 require 'options'
+require 'mappings'
+require 'lint'
+require 'lsp'
 --[[
 
 =====================================================================
