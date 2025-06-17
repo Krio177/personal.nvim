@@ -20,7 +20,7 @@ local lsp_servers = {
     },
   },
 }
-local ensure_installed = vim.tbl_keys(servers or {})
+local ensure_installed = vim.tbl_keys(lsp_servers or {})
 vim.list_extend(ensure_installed, {
   'stylua',
   'markdownlint',
@@ -46,13 +46,22 @@ vim.list_extend(ensure_installed, {
   'phpcs',
   'phpmd',
   'pint',
-
+  'yamllint',
   'css-lsp',
   'html-lsp',
   'bash-language-server',
   'dockerfile-language-server',
   'graphql-language-service-cli',
 })
+
+local dap_servers = {
+  'debugpy',
+  'php-debug-adapter',
+  'js-debug-adapter',
+  'chrome-debug-adapter',
+}
+vim.list_extend(ensure_installed, dap_servers)
+
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 require('mason-lspconfig').setup {
   ensure_installed = {},
