@@ -59,4 +59,4 @@ end, { desc = 'Harpoon next' })
 vim.keymap.set('n', '<C-p>', function()
   harpoon:list():prev()
 end, { desc = 'Harpoon previous' })
-return {}
+vim.keymap.set('n', '<leader>ft', '<cmd>FloatermToggle<cr>', { desc = 'Floaterm Toggle' })

@@ -88,3 +88,4 @@ vim.api.nvim_create_autocmd('WinLeave', {
     vim.wo.winhighlight = 'Normal:NormalNC,NormalNC:NormalNC'
   end,
 })
+vim.notify = require 'notify'
