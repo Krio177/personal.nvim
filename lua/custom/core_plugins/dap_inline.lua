@@ -1,6 +1,6 @@
 return {
   'theHamsta/nvim-dap-virtual-text',
-  lazy = true,
+  lazy = false,
   dependencies = {
     'mfussenegger/nvim-dap',
     'nvim-treesitter/nvim-treesitter',

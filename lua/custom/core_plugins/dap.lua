@@ -80,34 +80,22 @@ return {
       }
     end
 
+    vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DiagnosticWarn', linehl = 'Visual', numhl = 'DiagnosticWarn' })
     -- PHP configurations
-    dap.configurations.php = {
+    dap.configurations.go = {
       {
-        type = 'php',
+        type = 'go',
+        name = 'Debug (stop on panic)',
         request = 'launch',
-        name = 'Listen for Xdebug (Docker)',
-        port = 9194,
-        pathMappings = {
-          ['/var/www/html/MKOSZ/NYIL'] = vim.fn.getcwd(),
+        program = '${file}',
+        stopOnEntry = false,
+        setupCommands = {
+          {
+            text = 'break runtime.throw',
+            description = 'Stop on panic',
+            ignoreFailures = true,
+          },
         },
-        log = true,
-        xdebugSettings = {
-          max_children = 512,
-          max_data = 1024,
-          max_depth = 4,
-        },
-        hostname = '0.0.0.0',
-      },
-      {
-        type = 'php',
-        request = 'launch',
-        name = 'Listen for Xdebug (Local - 9003)',
-        port = 9003,
-        pathMappings = {
-          ['/var/www/html/MKOSZ/NYIL'] = vim.fn.getcwd(),
-        },
-        log = true,
-        hostname = '127.0.0.1',
       },
     }
 
@@ -122,48 +110,10 @@ return {
       },
     }
 
-    -- GO configurations
-    dap.configurations.go = {
-      {
-        type = 'go',
-        name = 'Debug File',
-        request = 'launch',
-        program = '${file}',
-      },
-      {
-        type = 'go',
-        name = 'Debug Package',
-        request = 'launch',
-        program = '${fileDirname}',
-      },
-      {
-        type = 'go',
-        name = 'Attach to Process',
-        request = 'attach',
-        processId = require('dap.utils').pick_process,
-      },
-      {
-        type = 'go',
-        name = 'Debug Test (File)',
-        request = 'launch',
-        mode = 'test',
-        program = '${file}',
-      },
-      {
-        type = 'go',
-        name = 'Debug Test (Package)',
-        request = 'launch',
-        mode = 'test',
-        program = '${fileDirname}',
-      },
-    }
-
     -- Mason setup
     require('mason-nvim-dap').setup {
       automatic_installation = true,
-      handlers = {
-        ['php-debug-adapter'] = function(config) end, -- Keep custom PHP config
-      },
+      handlers = {},
       ensure_installed = {
         'delve',
         'php-debug-adapter',
@@ -175,9 +125,9 @@ return {
     -- DAP UI setup
     dapui.setup()
     dap.listeners.after.event_stopped['dapui_config'] = function()
-      if not dapui.is_open() then
-        dapui.open()
-      end
+      -- if not dapui.is_open() then
+      dapui.open()
+      -- end
     end
 
     -- DAP-GO setup
