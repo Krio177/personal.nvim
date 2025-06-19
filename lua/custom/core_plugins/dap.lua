@@ -1,23 +1,13 @@
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    'leoluz/nvim-dap-go', -- Go debug adapter
   },
   keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
     {
       '<F5>',
       function()
@@ -72,23 +62,17 @@ return {
     local dap = require 'dap'
     local dapui = require 'dapui'
 
-    -- First, set up the PHP adapter and configurations BEFORE mason-nvim-dap
-    -- This ensures the configurations are available when DAP initializes
-
-    -- Debug: Check Mason installation path
+    -- PHP adapter setup
     local mason_path = vim.fn.stdpath 'data' .. '/mason/packages/php-debug-adapter'
     local php_debug_js = mason_path .. '/extension/out/phpDebug.js'
 
-    -- Try different adapter configurations
     if vim.fn.filereadable(php_debug_js) == 1 then
-      -- Mason installed version
       dap.adapters.php = {
         type = 'executable',
         command = 'node',
         args = { php_debug_js },
       }
     else
-      -- Fallback to direct command
       dap.adapters.php = {
         type = 'executable',
         command = 'php-debug-adapter',
@@ -96,13 +80,13 @@ return {
       }
     end
 
-    -- PHP debugging configurations - Docker compatible
+    -- PHP configurations
     dap.configurations.php = {
       {
         type = 'php',
         request = 'launch',
         name = 'Listen for Xdebug (Docker)',
-        port = 9194, -- Match your current Xdebug port
+        port = 9194,
         pathMappings = {
           ['/var/www/html/MKOSZ/NYIL'] = vim.fn.getcwd(),
         },
@@ -112,14 +96,13 @@ return {
           max_data = 1024,
           max_depth = 4,
         },
-        -- Docker specific settings
-        hostname = '0.0.0.0', -- Listen on all interfaces
+        hostname = '0.0.0.0',
       },
       {
         type = 'php',
         request = 'launch',
         name = 'Listen for Xdebug (Local - 9003)',
-        port = 9003, -- Standard Xdebug 3 port
+        port = 9003,
         pathMappings = {
           ['/var/www/html/MKOSZ/NYIL'] = vim.fn.getcwd(),
         },
@@ -128,14 +111,58 @@ return {
       },
     }
 
-    -- Now set up mason-nvim-dap
+    -- GO adapter setup
+    dap.adapters.go = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        command = 'dlv',
+        args = { 'dap', '-l', '127.0.0.1:${port}' },
+        detached = not vim.fn.has 'win32',
+      },
+    }
+
+    -- GO configurations
+    dap.configurations.go = {
+      {
+        type = 'go',
+        name = 'Debug File',
+        request = 'launch',
+        program = '${file}',
+      },
+      {
+        type = 'go',
+        name = 'Debug Package',
+        request = 'launch',
+        program = '${fileDirname}',
+      },
+      {
+        type = 'go',
+        name = 'Attach to Process',
+        request = 'attach',
+        processId = require('dap.utils').pick_process,
+      },
+      {
+        type = 'go',
+        name = 'Debug Test (File)',
+        request = 'launch',
+        mode = 'test',
+        program = '${file}',
+      },
+      {
+        type = 'go',
+        name = 'Debug Test (Package)',
+        request = 'launch',
+        mode = 'test',
+        program = '${fileDirname}',
+      },
+    }
+
+    -- Mason setup
     require('mason-nvim-dap').setup {
       automatic_installation = true,
       handlers = {
-        -- Don't let mason override our PHP config
-        ['php-debug-adapter'] = function(config)
-          -- Keep our custom configuration
-        end,
+        ['php-debug-adapter'] = function(config) end, -- Keep custom PHP config
       },
       ensure_installed = {
         'delve',
@@ -145,27 +172,20 @@ return {
       },
     }
 
+    -- DAP UI setup
+    dapui.setup()
     dap.listeners.after.event_stopped['dapui_config'] = function()
-      -- Safe UI opening - only if not already open
-      local ok, _ = pcall(function()
-        if not require('dapui').is_open() then
-          require('dapui').open()
-        end
-      end)
-      if not ok then
-        print 'DAP UI: Use <F7> or <leader>du to toggle manually'
+      if not dapui.is_open() then
+        dapui.open()
       end
     end
 
-    -- Install golang specific config
+    -- DAP-GO setup
     require('dap-go').setup {
       delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
+        args = { '--check-go-version=false' },
+        detached = not vim.fn.has 'win32',
       },
     }
-
-    -- Debug function to check PHP configuration
   end,
 }
