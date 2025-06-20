@@ -37,6 +37,7 @@ vim.list_extend(ensure_installed, {
   'ruff',
   'kube-linter',
   'yamllint',
+  'yamlfix',
   'shellcheck',
   'shfmt',
   'tflint',
