@@ -10,6 +10,7 @@ return {
         return
       end
       lint.linters_by_ft = {
+        yaml = { 'yamllint' },
         markdown = { 'markdownlint' },
         javascript = { 'eslint', 'eslint_d' },
         -- php = { 'phpcs', 'phpmd' },
