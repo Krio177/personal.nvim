@@ -41,6 +41,7 @@ return {
       dockerfile = { 'dockerfile-language-server' },
       terraform = { 'tflint' },
       ansible = { 'ansible-lint', 'ansible-language-server' },
+      rust = { 'rustfmt' },
     },
   },
 }

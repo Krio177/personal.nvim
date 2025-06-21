@@ -1,6 +1,7 @@
 local capabilities = require('blink.cmp').get_lsp_capabilities()
 local lsp_servers = {
   gopls = {},
+  rust_analyzer = {},
   phpactor = {
     init_options = {
       format = true,
@@ -53,10 +54,13 @@ vim.list_extend(ensure_installed, {
   'bash-language-server',
   'dockerfile-language-server',
   'graphql-language-service-cli',
+  'rustfmt',
 })
 
 local dap_servers = {
   'debugpy',
+  'delve',
+  'codelldb',
   'php-debug-adapter',
   'js-debug-adapter',
   'chrome-debug-adapter',
