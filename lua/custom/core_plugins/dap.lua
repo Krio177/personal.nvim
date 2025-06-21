@@ -65,7 +65,6 @@ return {
     -- PHP adapter setup
     local mason_path = vim.fn.stdpath 'data' .. '/mason/packages/php-debug-adapter'
     local php_debug_js = mason_path .. '/extension/out/phpDebug.js'
-
     if vim.fn.filereadable(php_debug_js) == 1 then
       dap.adapters.php = {
         type = 'executable',
@@ -80,8 +79,26 @@ return {
       }
     end
 
+    -- Rust adapter setup (using codelldb)
+    dap.adapters.codelldb = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        command = 'codelldb',
+        args = { '--port', '${port}' },
+      },
+    }
+
+    -- Alternative Rust adapter using lldb-vscode
+    dap.adapters.lldb = {
+      type = 'executable',
+      command = 'lldb-vscode',
+      name = 'lldb',
+    }
+
     vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DiagnosticWarn', linehl = 'Visual', numhl = 'DiagnosticWarn' })
-    -- PHP configurations
+
+    -- Go configurations
     dap.configurations.go = {
       {
         type = 'go',
@@ -96,6 +113,80 @@ return {
             ignoreFailures = true,
           },
         },
+      },
+    }
+
+    -- Helper function to get Rust executable
+    local function get_rust_executable()
+      local cwd = vim.fn.getcwd()
+      local cargo_toml = cwd .. '/Cargo.toml'
+
+      if vim.fn.filereadable(cargo_toml) == 1 then
+        -- Read Cargo.toml to get package name
+        local cargo_content = vim.fn.readfile(cargo_toml)
+        local package_name = nil
+
+        for _, line in ipairs(cargo_content) do
+          local name_match = line:match '^name%s*=%s*"([^"]+)"'
+          if name_match then
+            package_name = name_match
+            break
+          end
+        end
+
+        if package_name then
+          local executable = cwd .. '/target/debug/' .. package_name
+          if vim.fn.executable(executable) == 1 then
+            return executable
+          end
+        end
+      end
+
+      -- Fallback: let user choose
+      return vim.fn.input('Path to executable: ', cwd .. '/target/debug/', 'file')
+    end
+
+    -- Rust configurations
+    dap.configurations.rust = {
+      {
+        name = 'Launch (auto-detect)',
+        type = 'codelldb',
+        request = 'launch',
+        program = get_rust_executable,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+      },
+      {
+        name = 'Launch (manual path)',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+      },
+      {
+        name = 'Launch with args',
+        type = 'codelldb',
+        request = 'launch',
+        program = get_rust_executable,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = function()
+          local args_string = vim.fn.input 'Arguments: '
+          return vim.split(args_string, ' ')
+        end,
+      },
+      {
+        name = 'Attach to process',
+        type = 'codelldb',
+        request = 'attach',
+        pid = function()
+          return tonumber(vim.fn.input 'Process ID: ')
+        end,
       },
     }
 
@@ -119,15 +210,14 @@ return {
         'php-debug-adapter',
         'js-debug-adapter',
         'chrome-debug-adapter',
+        'codelldb', -- For Rust debugging
       },
     }
 
     -- DAP UI setup
     dapui.setup()
     dap.listeners.after.event_stopped['dapui_config'] = function()
-      -- if not dapui.is_open() then
       dapui.open()
-      -- end
     end
 
     -- DAP-GO setup
