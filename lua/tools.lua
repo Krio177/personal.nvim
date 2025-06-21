@@ -1,4 +1,5 @@
 local capabilities = require('blink.cmp').get_lsp_capabilities()
+
 local lsp_servers = {
   gopls = {},
   rust_analyzer = {},
@@ -20,7 +21,76 @@ local lsp_servers = {
       },
     },
   },
+  -- JavaScript/TypeScript szerverek
+  ts_ls = {
+    settings = {
+      typescript = {
+        inlayHints = {
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+      },
+      javascript = {
+        inlayHints = {
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+      },
+    },
+  },
+  -- ESLint szerver
+  eslint = {
+    settings = {
+      codeActionOnSave = {
+        enable = true,
+        mode = 'all',
+      },
+      format = true,
+      nodePath = '',
+      onIgnoredFiles = 'off',
+      packageManager = 'npm',
+      rulesCustomizations = {},
+      run = 'onType',
+      useESLintClass = false,
+      validate = 'on',
+      workingDirectory = { mode = 'location' },
+    },
+  },
+  -- Angular Language Server
+  angularls = {
+    filetypes = { 'typescript', 'html', 'typescriptreact', 'typescript.tsx' },
+    settings = {
+      angular = {
+        enable = true,
+        experimental = {
+          ivy = true,
+        },
+      },
+    },
+  },
+  -- Deno LSP (alternatíva Node.js helyett)
+  denols = {
+    root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc'),
+    settings = {
+      deno = {
+        enable = true,
+        lint = true,
+        unstable = true,
+      },
+    },
+  },
 }
+
 local ensure_installed = vim.tbl_keys(lsp_servers or {})
 vim.list_extend(ensure_installed, {
   'stylua',
@@ -55,6 +125,10 @@ vim.list_extend(ensure_installed, {
   'dockerfile-language-server',
   'graphql-language-service-cli',
   'rustfmt',
+  -- JavaScript/TypeScript tooling
+  'typescript-language-server',
+  'angular-language-server',
+  'deno',
 })
 
 local dap_servers = {
@@ -64,10 +138,13 @@ local dap_servers = {
   'php-debug-adapter',
   'js-debug-adapter',
   'chrome-debug-adapter',
+  'node-debug2-adapter',
 }
+
 vim.list_extend(ensure_installed, dap_servers)
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
 require('mason-lspconfig').setup {
   ensure_installed = {},
   automatic_installation = false,
@@ -79,3 +156,14 @@ require('mason-lspconfig').setup {
     end,
   },
 }
+
+-- Opcionális: TypeScript, JavaScript és Angular fájltípusok kezelése
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html' },
+  callback = function()
+    -- Beállítások specifikusan JS/TS/Angular fájlokhoz
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+  end,
+})
