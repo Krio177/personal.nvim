@@ -1,3 +1,6 @@
+-- Important Must be built manually after cloning the repository.
+-- cd ~/.local/share/nvim/lazy/avante.nvim
+-- make
 return {
   'yetone/avante.nvim',
   build = function()
