@@ -67,3 +67,4 @@ require('neo-tree').setup {
     },
   },
 }
+require 'toolbar'

@@ -59,4 +59,6 @@ end, { desc = 'Harpoon next' })
 vim.keymap.set('n', '<C-p>', function()
   harpoon:list():prev()
 end, { desc = 'Harpoon previous' })
-vim.keymap.set('n', '<leader>ft', '<cmd>FloatermToggle<cr>', { desc = 'Floaterm Toggle' })
+-- Goto prev
+vim.keymap.set('n', 'gp', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true, silent = true, desc = 'Goto preview definition' })
+vim.keymap.set('n', 'gP', "<cmd>lua require('goto-preview').close_all_win()<CR>", { noremap = true, silent = true, desc = 'Goto preview definition' })
