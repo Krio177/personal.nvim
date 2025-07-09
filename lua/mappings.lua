@@ -62,3 +62,32 @@ end, { desc = 'Harpoon previous' })
 -- Goto prev
 vim.keymap.set('n', 'gp', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true, silent = true, desc = 'Goto preview definition' })
 vim.keymap.set('n', 'gP', "<cmd>lua require('goto-preview').close_all_win()<CR>", { noremap = true, silent = true, desc = 'Goto preview definition' })
+local opts = { noremap = true, silent = true }
+
+-- Következő/előző buffer
+map('n', '<Tab>', '<cmd>BufferLineCycleNext<CR>', opts)
+map('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', opts)
+
+-- <leader>b prefix alatt
+local leader_b = '<leader>b'
+
+-- Buffer bezárása
+map('n', leader_b .. 'x', '<cmd>bp | bd #<CR>', { desc = 'Buffer bezárása' })
+
+-- Buffer kiválasztása (pick mode)
+map('n', leader_b .. 'o', '<cmd>BufferLinePick<CR>', { desc = 'Buffer kiválasztása' })
+
+-- Buffer pin/unpin
+map('n', leader_b .. 'p', '<cmd>BufferLineTogglePin<CR>', { desc = 'Buffer pin/unpin' })
+
+-- Összes buffer bezárása, kivéve az aktuálisat
+map('n', leader_b .. 'c', '<cmd>BufferLineCloseOthers<CR>', { desc = 'Többi buffer bezárása' })
+
+-- Bal/jobb összes buffer bezárása
+map('n', leader_b .. 'bl', '<cmd>BufferLineCloseRight<CR>', { desc = 'Jobbra lévő bufferek bezárása' })
+map('n', leader_b .. 'bh', '<cmd>BufferLineCloseLeft<CR>', { desc = 'Balra lévő bufferek bezárása' })
+
+-- Buffer áthelyezése balra/jobbra
+map('n', leader_b .. '<', '<cmd>BufferLineMovePrev<CR>', { desc = 'Buffer balra mozgatása' })
+map('n', leader_b .. '>', '<cmd>BufferLineMoveNext<CR>', { desc = 'Buffer jobbra mozgatása' })
+vim.keymap.set('n', '<leader>dq', vim.diagnostic.setqflist, { desc = 'LSP diagnosztikák QuickFix-be' })
