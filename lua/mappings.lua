@@ -91,3 +91,5 @@ map('n', leader_b .. 'bh', '<cmd>BufferLineCloseLeft<CR>', { desc = 'Balra lév�
 map('n', leader_b .. '<', '<cmd>BufferLineMovePrev<CR>', { desc = 'Buffer balra mozgatása' })
 map('n', leader_b .. '>', '<cmd>BufferLineMoveNext<CR>', { desc = 'Buffer jobbra mozgatása' })
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setqflist, { desc = 'LSP diagnosztikák QuickFix-be' })
+
+vim.keymap.set('n', '<leader>ft', '<cmd>FloatermToggle<cr>', { desc = 'FloatermToggle' })
