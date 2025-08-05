@@ -33,7 +33,7 @@ return {
       javascript = { 'prettierd', 'eslint_d' },
       typescript = { 'prettierd', 'eslint_d' },
       json = { 'prettierd', 'json-lsp' },
-      yaml = { 'yamlfix' },
+      -- yaml = { 'yamlfix' },
       html = { 'prettierd', 'html-lsp' },
       css = { 'prettierd', 'css-lsp' },
       markdown = { 'markdownlint' },
