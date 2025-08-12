@@ -89,3 +89,11 @@ vim.api.nvim_create_autocmd('WinLeave', {
   end,
 })
 vim.notify = require 'notify'
+
+-- Automatikus quickfix feltöltés diagnosztika változások esetén
+vim.api.nvim_create_autocmd('DiagnosticChanged', {
+  callback = function()
+    vim.diagnostic.setqflist { open = false }
+  end,
+  desc = 'Automatikusan frissíti a quickfix listát diagnosztika változások esetén',
+})
