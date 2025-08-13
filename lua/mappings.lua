@@ -70,3 +70,16 @@ vim.keymap.set('n', '<leader>co', function()
   vim.diagnostic.setqflist()
   vim.cmd 'copen'
 end, { desc = 'Diagnosztikák QuickFix-be és megnyitás' })
+
+-- Clipboard copy/paste mappings
+-- Copy to clipboard
+vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+vim.keymap.set('n', '<leader>Y', '"+yg_', { desc = 'Copy to end of line to clipboard' })
+vim.keymap.set('n', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+vim.keymap.set('n', '<leader>yy', '"+yy', { desc = 'Copy whole line to clipboard' })
+
+-- Paste from clipboard
+vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from clipboard after cursor' })
+vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from clipboard' })
+
+vim.keymap.set('n', '<leader>P', ':Telescope neoclip<CR>', { desc = 'Open Neoclip Yank History' })
