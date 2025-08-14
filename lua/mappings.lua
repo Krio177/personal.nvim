@@ -65,11 +65,7 @@ map('n', leader_b .. 'bh', '<cmd>BufferLineCloseLeft<CR>', { desc = 'Balra lév�
 map('n', leader_b .. '<', '<cmd>BufferLineMovePrev<CR>', { desc = 'Buffer balra mozgatása' })
 map('n', leader_b .. '>', '<cmd>BufferLineMoveNext<CR>', { desc = 'Buffer jobbra mozgatása' })
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setqflist, { desc = 'LSP diagnosztikák QuickFix-be' })
--- Kényelmes mapping: diagnosztikák quickfix-be + megnyitás
-vim.keymap.set('n', '<leader>co', function()
-  vim.diagnostic.setqflist()
-  vim.cmd 'copen'
-end, { desc = 'Diagnosztikák QuickFix-be és megnyitás' })
+vim.keymap.set('n', '<leader>q', '<cmd>quit<CR>', { desc = 'Close current window' })
 
 -- Clipboard copy/paste mappings
 -- Copy to clipboard
