@@ -89,3 +89,7 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
   end,
   desc = 'Automatikusan frissíti a quickfix listát diagnosztika változások esetén',
 })
+require('overseer').setup {
+  -- Globális beállítás, hogy alapértelmezett stratégia a toggleterm legyen
+  strategy = 'toggleterm',
+}

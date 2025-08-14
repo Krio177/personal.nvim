@@ -83,3 +83,22 @@ vim.keymap.set('n', '<leader>p', '"+p', { desc = 'Paste from clipboard after cur
 vim.keymap.set('v', '<leader>p', '"+p', { desc = 'Paste from clipboard' })
 
 vim.keymap.set('n', '<leader>P', ':Telescope neoclip<CR>', { desc = 'Open Neoclip Yank History' })
+
+-- Overseer keybindings under <leader>o prefix
+local leader_o = '<leader>o'
+
+-- Task management
+map('n', leader_o .. 'r', '<cmd>OverseerRun<CR>', { desc = 'Feladat futtatása' })
+map('n', leader_o .. 't', '<cmd>OverseerToggle<CR>', { desc = 'Overseer panel megnyitása/bezárása' })
+map('n', leader_o .. 'a', '<cmd>OverseerTaskAction<CR>', { desc = 'Feladat művelet' })
+map('n', leader_o .. 'i', '<cmd>OverseerInfo<CR>', { desc = 'Overseer információk' })
+
+-- Quick actions
+map('n', leader_o .. 'q', '<cmd>OverseerQuickAction<CR>', { desc = 'Gyors művelet' })
+map('n', leader_o .. 'b', '<cmd>OverseerBuild<CR>', { desc = 'Build projekt' })
+map('n', leader_o .. 'c', '<cmd>OverseerClearCache<CR>', { desc = 'Cache törlése' })
+
+-- Task list and management
+map('n', leader_o .. 'l', '<cmd>OverseerLoadBundle<CR>', { desc = 'Bundle betöltése' })
+map('n', leader_o .. 's', '<cmd>OverseerSaveBundle<CR>', { desc = 'Bundle mentése' })
+map('n', leader_o .. 'd', '<cmd>OverseerDeleteBundle<CR>', { desc = 'Bundle törlése' })
