@@ -23,6 +23,10 @@ map('i', '<C-l>', function()
 end, { desc = 'Copilot Accept ', noremap = true, silent = true })
 local harpoon = require 'harpoon'
 
+-- Save buffer with Ctrl+S in normal and insert mode
+vim.keymap.set('n', '<C-s>', '<cmd>wa<CR>', { desc = 'Save buffer' })
+vim.keymap.set('i', '<C-s>', '<C-o>:wa<CR>', { desc = 'Save buffer' })
+
 -- REQUIRED
 harpoon:setup()
 vim.keymap.set('n', '<C-S-A>', function()
