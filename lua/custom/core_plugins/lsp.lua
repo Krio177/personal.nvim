@@ -8,6 +8,19 @@ return {
     'saghen/blink.cmp',
   },
   config = function()
+    -- Set default options for LSP floating windows (hover, signature, etc.)
+    local lsp_util = vim.lsp.util
+    local orig_open_floating_preview = lsp_util.open_floating_preview
+    ---@diagnostic disable-next-line: duplicate-set-field
+    function lsp_util.open_floating_preview(contents, syntax, opts, ...)
+      opts = opts or {}
+      opts.border = opts.border or 'rounded'
+      opts.max_width = opts.max_width or 120
+      opts.max_height = opts.max_height or 40
+      opts.wrap = opts.wrap ~= false -- force wrap by default
+      return orig_open_floating_preview(contents, syntax, opts, ...)
+    end
+
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
@@ -16,6 +29,16 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+        map('gh', function()
+          local bufnr = event.buf
+          local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+          local diagnostics = vim.diagnostic.get(bufnr, { lnum = line })
+          if #diagnostics == 0 then
+            vim.notify('Nincs diagnosztikai üzenet ezen a soron.', vim.log.levels.INFO)
+          else
+            vim.diagnostic.open_float()
+          end
+        end, '[G]oto [H]iba üzenet (diagnostic float)')
         map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
         map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
