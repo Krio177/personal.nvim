@@ -25,15 +25,7 @@ return {
           return ' ' .. icon .. count
         end,
       },
-      highlights = require('catppuccin.groups.integrations.bufferline').get {
-        custom = {
-          all = {},
-          macchiato = { -- vagy a választott flavour
-            buffer_selected = { underline = true },
-            tab_selected = { underline = true },
-          },
-        },
-      },
+      -- highlights = require('catppuccin.groups.integrations.bufferline').get(),
     }
   end,
 }
