@@ -18,9 +18,9 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 local map = vim.keymap.set
-map('i', '<C-l>', function()
-  vim.fn.feedkeys(vim.fn['copilot#Accept'](), '')
-end, { desc = 'Copilot Accept ', noremap = true, silent = true })
+-- map('i', '<C-l>', function()
+--   vim.fn.feedkeys(vim.fn['copilot#Accept'](), '')
+-- end, { desc = 'Copilot Accept ', noremap = true, silent = true })
 local harpoon = require 'harpoon'
 
 -- Save buffer with Ctrl+S in normal and insert mode
