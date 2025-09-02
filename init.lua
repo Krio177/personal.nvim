@@ -67,4 +67,4 @@ require('neo-tree').setup {
     },
   },
 }
-require 'toolbar'
+vim.o.guifont = 'JetBrains Mono:h12'
